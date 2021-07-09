@@ -1,31 +1,25 @@
-       PROG   = matmult
+CC = gcc
+LIKWID_PATH = /home/soft/likwid
+SRC = matmult.c matriz.c
+OBJS = matmult.o matriz.o
+RM = rm -f
+CFLAGS = -O3 -mavx2 -march=native
+OUTPUT = matmult
 
-           CC = gcc -std=c11 -g
-         OBJS = matriz.o
+all: $(OBJS)
+        $(CC) -L$(LIKWID_PATH)/lib $(OBJS) -o $(OUTPUT) -llikwid
 
-       CFLAGS =  
-       LFLAGS = -lm
+matmult.o: matmult.c
+        $(CC) $(CFLAGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matmult.c
 
-.PHONY: all debug clean limpa purge faxina
+matriz.o: matriz.c matriz.h
+        $(CC) $(CFLGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matriz.c
 
-%.o: %.c %.h
-	$(CC) $(CFLAGS) -c $<
+clean:
+        $(RM) $(OBJS)
 
-all: $(PROG)
+purge: clean
+        $(RM) $(OUTPUT)
 
-debug:         CFLAGS += -DDEBUG
-debug:         $(PROG)
-
-$(PROG):  $(PROG).o
-
-$(PROG): $(OBJS) 
-	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
-
-clean limpa:
-	@echo "Limpando ...."
-	@rm -f *~ *.bak *.tmp
-
-purge faxina:   clean
-	@echo "Faxina ...."
-	@rm -f  $(PROG) *.o core a.out
-	@rm -f *.png marker.out *.log
+run:
+        likwid-perfctr -C 3 -g FLOPS_DP -m ./$(OUTPUT) -n 64

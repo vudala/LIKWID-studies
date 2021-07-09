@@ -1,0 +1,63 @@
+multMatPtrVet
+N       Memory bandwidth [MBytes/s]
+64      4691.0120
+100     2934.0887
+128     3443.2271
+
+N       Data cache miss ratio
+64
+100
+128
+
+N       MFLOP/s
+64
+100
+128
+
+multMatRowVet
+N       Memory bandwidth [MBytes/s]
+64      3596.3735
+100     2619.5356
+128     2778.1287
+
+N       Data cache miss ratio
+64
+100
+128
+
+N       MFLOP/s
+64
+100
+128
+
+multMatMatPtr
+N       Memory bandwidth [MBytes/s]
+64      120.0420
+100     55.8808
+128     61.2455
+
+N       Data cache miss ratio
+64
+100
+128
+
+N       MFLOP/s
+64
+100
+128
+
+multMatMatRow
+N       Memory bandwidth [MBytes/s]
+64      98.8674
+100     64.5265
+128     58.2838
+
+N       Data cache miss ratio
+64
+100
+128
+
+N       MFLOP/s
+64
+100
+128

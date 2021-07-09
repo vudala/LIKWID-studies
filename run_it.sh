@@ -20,7 +20,7 @@ do
 done
 
 # monitora a banda de memória das funções
-for N in 64 100 128;
+for N in 64 100 128 2000 2048;
 do
     likwid-perfctr -C 3 -g L3 -m "$PROGRAM -n $N" > aux.tmp
     RESULT=$(cat aux.tmp | grep "L3 bandwidth" | cut -d'|' -f3)
@@ -60,7 +60,7 @@ do
     echo '----------------' >> $file
     echo "N:Data cache miss ratio" >> $file
 done
-for N in 64 100 128;
+for N in 64 100 128 2000 2048;
 do
     likwid-perfctr -C 3 -g L2CACHE -m $PROGRAM -n $N > aux.tmp
     RESULT=$(cat aux.tmp | grep "L2 miss ratio" | cut -d'|' -f3)
@@ -80,18 +80,28 @@ done
 for file in ${TMP[*]};
 do  
     echo '----------------' >> $file
-    echo "N:MFLOP/s" >> $file
+    echo "N:DP MFLOP/s:AVX DP MFLOP/s" >> $file
 done
-for N in 64 100 128;
+for N in 64 100 128 2000 2048;
 do
     likwid-perfctr -C 3 -g FLOPS_DP -m "$PROGRAM -n $N" > aux.tmp
-    RESULT=$(cat aux.tmp | grep -v "AVX" | grep "DP MFLOP/s" | cut -d'|' -f3)
-    RESULT=$(echo ${RESULT//$'\n'/})
+    RESULT_DP=$(cat aux.tmp | grep -v "AVX" | grep "DP MFLOP/s" | cut -d'|' -f3)
+    RESULT_DP=$(echo ${RESULT_DP//$'\n'/})
+
+    RESULT_AVX=$(cat aux.tmp | grep "AVX" | cut -d'|' -f3)
+    RESULT_AVX=$(echo ${RESULT_AVX//$'\n'/})
 
     let counter=0
-    for r in $RESULT;
+    for r in $RESULT_DP;
     do
         echo -n "$N:" >> ${TMP[$counter]}
+        echo -n $r: >> ${TMP[$counter]}
+        let counter++
+    done
+
+    let counter=0
+    for r in $RESULT_AVX;
+    do
         echo $r >> ${TMP[$counter]}
         let counter++
     done

@@ -7,19 +7,19 @@ CFLAGS = -O3 -mavx2 -march=native
 OUTPUT = matmult
 
 all: $(OBJS)
-        $(CC) -L$(LIKWID_PATH)/lib $(OBJS) -o $(OUTPUT) -llikwid
+	$(CC) -L$(LIKWID_PATH)/lib $(OBJS) -o $(OUTPUT) -llikwid
 
 matmult.o: matmult.c
-        $(CC) $(CFLAGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matmult.c
+	$(CC) $(CFLAGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matmult.c
 
 matriz.o: matriz.c matriz.h
-        $(CC) $(CFLGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matriz.c
+	$(CC) $(CFLGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matriz.c
 
 clean:
-        $(RM) $(OBJS)
+	$(RM) $(OBJS)
 
 purge: clean
-        $(RM) $(OUTPUT)
+	$(RM) $(OUTPUT)
 
 run:
-        likwid-perfctr -C 3 -g FLOPS_DP -m ./$(OUTPUT) -n 64
+	likwid-perfctr -C 3 -g FLOPS_DP -m "./$(OUTPUT) -n 64"

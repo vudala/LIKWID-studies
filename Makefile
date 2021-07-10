@@ -16,6 +16,7 @@ matriz.o: matriz.c matriz.h
 	$(CC) $(CFLGS) -DLIKWID_PERFMON -I${LIKWID_PATH}/include -c matriz.c
 
 clean:
+	$(RM) *.tmp
 	$(RM) $(OBJS)
 
 purge: clean
@@ -23,4 +24,3 @@ purge: clean
 
 run: ./run_it.sh
 	./run_it.sh
-	
